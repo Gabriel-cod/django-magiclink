@@ -15,9 +15,9 @@ keywords = ["magic link", "authentication", "passwordless"]
 [tool.poetry.dependencies]
 python = "^3.6"
 Django = ">=2.1"
-packaging = ">=20.9,<22.0"
+packaging = ">=20.9,<24.0"
 
-[tool.poetry.dev-dependencies]
+[poetry.group.dev.dependencies]
 flake8 = "^4.0.1"
 tox = "^3.28.0"
 isort = {extras = ["pyproject"], version = "^5.4.2"}
