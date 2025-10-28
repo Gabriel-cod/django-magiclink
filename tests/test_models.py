@@ -93,7 +93,7 @@ def test_send_email(mocker, settings, magic_link):  # NOQA: F811
         subject=mlsettings.EMAIL_SUBJECT,
         message=mocker.ANY,
         recipient_list=[ml.email],
-        from_email=settings.DEFAULT_FROM_EMAIL,
+        from_email=settings.DEFAULT_FROM_MAIL,
         html_message=mocker.ANY,
     )
 
@@ -130,7 +130,7 @@ def test_send_email_pass_email_in_unsubscribe(mocker, settings, magic_link):  # 
         subject=mlsettings.EMAIL_SUBJECT,
         message=mocker.ANY,
         recipient_list=[ml.email],
-        from_email=settings.DEFAULT_FROM_EMAIL,
+        from_email=settings.DEFAULT_FROM_MAIL,
         html_message=mocker.ANY,
     )
 
