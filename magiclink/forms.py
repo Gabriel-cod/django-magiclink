@@ -66,6 +66,12 @@ class AntiSpam(forms.Form):
 
 
 class LoginForm(AntiSpam):
+    error_messages = {
+        'email_not_found': 'We could not find a user with that email address',
+        'user_deactivated': 'This user has been deactivated',
+        'email_in_unsubscribe': 'Email address is on the unsubscribe list',
+    }
+    
     email = forms.EmailField(
         widget=forms.EmailInput(attrs={
             'autofocus': 'autofocus', 'placeholder': 'Enter your email'
@@ -82,17 +88,18 @@ class LoginForm(AntiSpam):
             user = User.objects.get(email=email)
         except User.DoesNotExist:
             if settings.REQUIRE_SIGNUP:
-                error = 'We could not find a user with that email address'
+                error = self.error_messages['email_not_found']
                 raise forms.ValidationError(error)
         else:
             is_active = getattr(user, 'is_active', True)
             if not settings.IGNORE_IS_ACTIVE_FLAG and not is_active:
-                raise forms.ValidationError('This user has been deactivated')
+                error = self.error_messages['user_deactivated']
+                raise forms.ValidationError(error)
 
         if not settings.IGNORE_UNSUBSCRIBE_IF_USER:
             try:
                 MagicLinkUnsubscribe.objects.get(email=email)
-                error = 'Email address is on the unsubscribe list'
+                error = self.error_messages['email_in_unsubscribe']
                 raise forms.ValidationError(error)
             except MagicLinkUnsubscribe.DoesNotExist:
                 pass
