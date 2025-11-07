@@ -46,10 +46,13 @@ class MagicLink(models.Model):
         self.disabled = True
         self.save()
 
-    def generate_url(self, request: HttpRequest) -> str:
+    def generate_url(self, request: HttpRequest, expiresession: bool = True) -> str:
         url_path = reverse(settings.LOGIN_VERIFY_URL)
 
         params = {'token': self.token}
+        params['expiresession'] = '1' # Expire the session when closing the browser
+        if not expiresession:
+            params['expiresession'] = '0' # Don't expire the session
         if settings.VERIFY_INCLUDE_EMAIL:
             params['email'] = self.email
         query = urlencode(params)

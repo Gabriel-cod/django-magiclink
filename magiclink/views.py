@@ -97,6 +97,7 @@ class LoginVerify(TemplateView):
     def get(self, request, *args, **kwargs):
         token = request.GET.get('token')
         email = request.GET.get('email')
+        expire_session = request.GET.get('expiresession')
         user = authenticate(request, token=token, email=email)
         if not user:
             if settings.LOGIN_FAILED_REDIRECT:
@@ -130,6 +131,13 @@ class LoginVerify(TemplateView):
 
         login(request, user)
         log.info(f'Login successful for {email}')
+
+        if expire_session == '0':
+            # Don't expire the session
+            request.session.set_expiry(settings.SESSION_COOKIE_AGE)
+        else:
+            # Session will expire when the browser is closed
+            request.session.set_expiry(0)
 
         response = self.login_complete_action()
         if settings.REQUIRE_SAME_BROWSER:

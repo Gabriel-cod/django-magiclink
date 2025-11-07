@@ -32,6 +32,9 @@ else:
                    'sussptable to brute force attacks')
         warnings.warn(warning, RuntimeWarning)
 
+# In seconds, default is 30 days
+SESSION_COOKIE_AGE = getattr(settings, 'SESSION_COOKIE_AGE', 60 * 60 * 24 * 30)
+
 try:
     # In seconds
     AUTH_TIMEOUT = int(getattr(settings, 'MAGICLINK_AUTH_TIMEOUT', 300))
