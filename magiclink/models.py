@@ -64,7 +64,8 @@ class MagicLink(models.Model):
         return url
 
     def send(
-        self, request: HttpRequest, subject=None, base_html=None, base_plain=None
+        self, request: HttpRequest, subject=None, base_html=None, base_plain=None,
+        expiresession: bool = True
         ) -> None:
         user = User.objects.get(email=self.email)
 
@@ -79,7 +80,7 @@ class MagicLink(models.Model):
         context = {
             'subject': subject or settings.EMAIL_SUBJECT,
             'user': user,
-            'magiclink': self.generate_url(request),
+            'magiclink': self.generate_url(request, expiresession),
             'expiry': self.expiry,
             'ip_address': self.ip_address,
             'created': self.created,
